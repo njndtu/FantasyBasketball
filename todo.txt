@@ -1,0 +1,22 @@
+Todo rightnow
+
+do the position download
+
+setup testing environment
+      - statistic to validate
+materialized views for,
+- teams
+- players
+
+how well something was
+come up with theories
+
+the update process
+- how, write the scripts
+- think about what i should be doing in a day
+
+
+updates
+- rosters
+- injuries
+- coaches

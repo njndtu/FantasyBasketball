@@ -1,0 +1,14 @@
+# for dk salaries I have to put it in the first 8 "blocks" at each line
+# I will write to DK_entries/classic/copycat.csv
+
+import csv
+
+def write_it(lineups,name):
+    csv_write = open('DK_entries/classic/copycat_'+name+'.csv','w')
+    fieldnames = ['PG','SG','SF','PF','C','G','F','UTIL']
+    writer = csv.DictWriter(csv_write,fieldnames=fieldnames)
+    writer.writeheader()
+    for lineup in lineups : 
+        writer.writerow({'PG':lineup[0],'SG':lineup[1],'SF':lineup[2],'PF':lineup[3],'C':lineup[4],'G':lineup[5],'F':lineup[6],'UTIL':lineup[7]})
+             
+   

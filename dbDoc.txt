@@ -1,0 +1,264 @@
+[table teams]
+create table teams (
+city text,
+name text unique,
+nba_abbr text unique,
+nba_id integer unique ,
+msf_id integer unique ,
+msf_abbr text unique,
+dk_abbr text unique,
+conference boolean,
+division text,
+br_abbr text unique
+);
+if conference is true, western, else eastern
+
+[table games]
+create table games (
+date_of_game date,
+time_of_game time,
+court text, 
+home text,
+away text,
+nba_id integer unique,
+msf_id integer unique,
+home_coach text,
+away_coach text,
+duration smallint,
+refs text[],
+type text,
+attendence integer,
+updated boolean
+
+);
+-duration is in seconds
+- type : regular, playoff, preseason
+- nba_id, does not have 00
+$VIRTUAL$
+- home score
+- away score
+
+[table officials]
+create table officials(
+nba_id integer unique,
+first_name text,
+last_name text,
+jersey_num smallint
+
+);
+if jersey_num 7777 then no available
+
+[table players]
+
+create table players (
+nba_name text,
+msf_name text,
+nba_id integer unique ,
+msf_id integer unique ,
+dk_id integer unique ,
+fd_id integer unique,
+bday date,
+birth_city text,
+birth_country text,
+college text,
+twitter text,
+instagram text unique,
+shooting_hand bool,
+draft_team text,
+draft_year smallint,
+draft_number smallint,
+height integer,
+weight integer,
+other_names text[]
+);
+shootinghand == true => shoots lefty, otherwise right
+height is in inches
+weight is in imp
+if undrafted, draft year and draft pick =0
+
+[table game_statlines]
+create table game_statlines(
+game_id integer,
+player_id integer,
+team_id integer,
+jersey smallint,
+was_active bool,
+status text,
+salary_dk smallint,
+salary_fd smallint,
+duration smallint,
+fgm smallint,
+fga smallint,
+threepm smallint,
+threepa smallint,
+ftm smallint,
+fta smallint,
+oreb smallint,
+dreb smallint,
+ast smallint,
+tos smallint,
+stl smallint,
+blk smallint,
+pf smallint,
+plus_minus smallint,
+pace real,
+poto smallint,
+scp smallint,
+fbp smallint,
+pitp smallint,
+blka smallint,
+pfd smallint,
+two_made_ast real,
+two_made_uast real,
+three_made_ast real,
+three_made_uast real,
+usage real,
+distance real,
+speed real,
+touches smallint,
+passes smallint,
+dfgm smallint,
+dfga smallint,
+orbc smallint,
+drbc smallint,
+contested_fgm smallint,
+contested_fga smallint,
+uncontested_fgm smallint,
+uncontested_fga smallint,
+screen_assists smallint,
+deflections smallint,
+looseball_recovered smallint,
+charges_drawn smallint,
+twos_contested smallint,
+threes_contested smallint,
+primary key (game_id,player_id)
+);
+-game_id will always be nba.com's id
+-player_id will also match that of nba's
+-if not home, then away
+-status : played, DNP, DND, include injury status
+-duration is in seconds, if status is not played, duration is 0
+-two/three m (u)ast add up together to 100, they a percentage
+-dfgm is successful defense at rim, dfga is total chances
+-matchup_player shows defender's nba id, schema is off-def
+- matchup_stats format(defPlayerId,poss,ast,tov,blk,fgm,fga,threepm,threepa,ftm,shootingf,deff,offf)
+
+
+$VIRTUAL$
+- win 
+- fantasy points earned
+  - DK and fanduel have different conversion tables
+###############################################################
+17-18
+[traditional]
+[advanced]
+[misc]
+[scoring]
+[usage]
+[four factors] not actually used
+[player tracking]
+[hustle]
+[defense]
+[matchups]
+16-17
+[traditional]
+[advanced]
+[misc]
+[scoring]
+[usage]
+[four factors]
+[player tracking]
+[hustle]
+15-16, 14-15, 13-14 . . . . . . .
+[traditional]
+[advanced]
+[misc]
+[scoring]
+[usage]
+[four factors]
+[player tracking]
+###############################################################
+
+[table matchups]
+create table matchups(
+game_id integer,
+off_player integer,
+def_player integer,
+poss smallint,
+ast smallint,
+tov smallint,
+blk smallint,
+fgm smallint,
+fga smallint,
+threepm smallint,
+threepa smallint,
+ftm smallint,
+shooting_foul smallint,
+def_foul smallint,
+off_foul smallint,
+primary key(game_id,off_player,def_player)
+);
+
+
+[table venues]
+create table venues(
+name text unique not null,
+city text,
+country text,
+msf_id smallint unique,
+);
+
+[table coaches]
+create table coaches(
+name text unique not null,
+br_link text
+
+);
+
+[table coaching]
+create table coaching(
+coach_name text,
+team_id integer,
+date_start date,
+date_end date,
+games smallint,
+is_head boolean,
+
+);
+if is_head is fall, games is null
+
+
+
+[table executives]
+create table executives(
+team_abr text,
+date_start,
+date_end,
+
+);
+
+
+
+
+
+
+[table transactions]
+# I can store the oldest recording team "state" in a json file
+
+court
+- change
+coach
+- gain/loss
+player
+- gain/loss
+
+create table transactions(
+transaction_date date,
+team_nba_id integer,
+addition boolean,
+transaction_type text,
+
+
+);
+if addition is true, then is a gain, false means loss
+transaction types : coach, player, court 

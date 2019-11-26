@@ -1,0 +1,66 @@
+# database initial table creations
+import requests
+import json
+import psycopg2
+import os
+from time import sleep
+import sys
+
+# arguments to pass in
+# rg : just update rotogrinder predictions
+# normal : run this base start everyday
+
+
+# do this everyday
+# run this script, manually remove csv files, then download the csv files
+
+# time has yet to exceed 20 mins
+
+
+
+# pass in rg to just run update on rg predicitons
+if(sys.argv[1] == "rg"):
+    os.chdir("ScrapySpiders")
+    os.system("scrapy crawl rg_predictions")
+    quit()
+
+conn = psycopg2.connect("dbname=basketball user = nd2")
+cur = conn.cursor()
+
+# first get players
+# update argument does some different
+print("NBA players---------------------------------")
+os.system("python NbaFullGames/NbaPlayers.py update")
+
+print("MSF players---------------------------------")
+os.system("python MySportsFeed/MsfPlayers.py")
+
+print("NBA team games---------------------------------")
+os.system("python NbaFullGames/NbaTeamGames.py update")
+
+print("NBA statline---------------------------------")
+os.system("python NbaFullGames/NbaGameStatline.py update")
+
+print("MSF salaries---------------------------------")
+os.system("python MySportsFeed/MsfSalaries.py update")
+
+# now get the salaries from previous 
+# lol them id's be wrong though
+
+# now get coaches
+print("BR coaches---------------------------------")
+os.system("python BasketballReference/BrCoaches.py update")
+
+
+# update rotogrinders stuff, before updating clear the table
+
+cur.execute("delete from rotogrinders_predictions")
+conn.commit()
+
+os.chdir("ScrapySpiders")
+os.system("scrapy crawl rg_predictions")
+
+
+
+cur.close()
+conn.close()

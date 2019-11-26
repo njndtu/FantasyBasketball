@@ -1,0 +1,11 @@
+import psycopg2
+
+def rg_prediction(name):
+    
+
+
+
+
+def getHeuristic(name,strat):
+    if (strat = "rg"):
+        return rg_prediction(name)

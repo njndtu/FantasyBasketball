@@ -1,0 +1,9 @@
+number = input("What Number?")
+college = input("What College?")
+conference = input("What Conference?")
+
+
+raw_data = input("Paste raw data")
+
+
+print(raw_data)
